@@ -1,0 +1,69 @@
+{
+    "automappingRulesFile": "",
+    "commands": [
+    ],
+    "extensionsPath": "extensions",
+    "folders": [
+        "."
+    ],
+    "propertyTypes": [
+        {
+            "color": "#ffff0000",
+            "id": 4,
+            "members": [
+            ],
+            "name": "flag",
+            "type": "class",
+            "useAs": [
+                "property",
+                "object"
+            ]
+        },
+        {
+            "color": "#ff0000ff",
+            "id": 1,
+            "members": [
+            ],
+            "name": "spawn",
+            "type": "class",
+            "useAs": [
+                "property",
+                "object"
+            ]
+        },
+        {
+            "color": "#ffaa00ff",
+            "id": 2,
+            "members": [
+                {
+                    "name": "dst",
+                    "type": "object",
+                    "value": 0
+                }
+            ],
+            "name": "teleporter",
+            "type": "class",
+            "useAs": [
+                "property",
+                "object"
+            ]
+        },
+        {
+            "color": "#ffa0a0a4",
+            "id": 3,
+            "members": [
+                {
+                    "name": "isSolid",
+                    "type": "bool",
+                    "value": false
+                }
+            ],
+            "name": "tile",
+            "type": "class",
+            "useAs": [
+                "property",
+                "tile"
+            ]
+        }
+    ]
+}

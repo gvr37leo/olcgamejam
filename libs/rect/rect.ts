@@ -5,7 +5,13 @@ class Rect{
     }
 
     static fromsize(pos:Vector,size:Vector){
-        return new Rect(pos,pos.c().add(size))
+        return new Rect(pos.c(),pos.c().add(size))
+    }
+
+    static fromCenter(center:Vector,size:Vector){
+        var halfsize = size.c()
+        var pos = center.c().sub(halfsize)
+        return new Rect(pos.c(),pos.c().add(size))
     }
 
     collidePoint(point:Vector){

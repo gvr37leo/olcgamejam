@@ -1,0 +1,79 @@
+{
+    "Map/SizeTest": {
+        "height": 4300,
+        "width": 2
+    },
+    "activeFile": "tiles.js",
+    "expandedProjectPaths": [
+        "."
+    ],
+    "fileStates": {
+        "": {
+            "scaleInDock": 1,
+            "scaleInEditor": 1
+        },
+        ":/automap-tiles.tsx": {
+            "scaleInDock": 1
+        },
+        "testmap.js": {
+            "expandedObjectLayers": [
+                2
+            ],
+            "scale": 1,
+            "selectedLayer": 0,
+            "viewCenter": {
+                "x": 383.5,
+                "y": 250
+            }
+        },
+        "testmap.js#TX Tileset Grass": {
+            "scaleInDock": 1
+        },
+        "testmap.js#TX Tileset Wall": {
+            "scaleInDock": 0.75
+        },
+        "tiles.js": {
+            "scale": 0.0625,
+            "selectedLayer": 0,
+            "viewCenter": {
+                "x": 4072,
+                "y": 4736
+            }
+        },
+        "tiles.js#TX Props": {
+            "scaleInDock": 1
+        },
+        "tiles.js#TX Tileset Grass": {
+            "scaleInDock": 0.5
+        },
+        "tiles.js#TX Tileset Stone Ground": {
+            "scaleInDock": 1
+        },
+        "tiles.js#TX Tileset Wall": {
+            "dynamicWrapping": false,
+            "scaleInDock": 1,
+            "scaleInEditor": 1
+        },
+        "tiles.js#memoryworld": {
+            "scaleInDock": 1
+        },
+        "tiles.js#tiles": {
+            "dynamicWrapping": true,
+            "scaleInEditor": 1
+        }
+    },
+    "last.imagePath": "C:/projects/olcgamejam/res",
+    "map.height": 20,
+    "map.lastUsedFormat": "js",
+    "map.width": 20,
+    "openFiles": [
+        "tiles.js"
+    ],
+    "project": "memory.tiled-project",
+    "recentFiles": [
+        "testmap.js",
+        "tiles.js"
+    ],
+    "tileset.embedInMap": true,
+    "tileset.type": 0
+}

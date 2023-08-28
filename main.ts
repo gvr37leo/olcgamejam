@@ -13,16 +13,19 @@
 /// <reference path="libs/networking/entity.ts" />
 /// <reference path="libs/networking/server.ts" />
 /// <reference path="libs/utils/domutils.js" />
-/// <reference path="src/level1.ts" />
-/// <reference path="src/level2.ts" />
-/// <reference path="src/level3.ts" />
 /// <reference path="src/utils.ts" />
 /// <reference path="src/bit.ts" />
 /// <reference path="src/enemy.ts" />
+/// <reference path="src/cooldown.ts" />
 /// <reference path="src/gun.ts" />
 /// <reference path="src/entity.ts" />
 /// <reference path="src/player.ts" />
 /// <reference path="src/tiled.js" />
+/// <reference path="src/level1.ts" />
+/// <reference path="src/level2.ts" />
+/// <reference path="src/level3.ts" />
+/// <reference path="src/menulevel.ts" />
+
 
 
 //idea for memory game
@@ -40,11 +43,16 @@
 //level 3 = edit the enemies to have less health, be slower, or set the array to zero
 //level 4 = bring it all together
 
-
-
+//
+//todo cooldown for teleporter and gun and enemy attack
+var memoryimage = loadImage('res/memomryworld.png')
 var TileMaps:any
-// var tiledmap = TileMaps.tiles
-var tiledmap = TileMaps.testmap
+var levels = [TileMaps.level1,TileMaps.level2,TileMaps.level3,TileMaps.menulevel]
+var levelindex = 3
+var tiledmap = levels[levelindex]
+for(var level of levels){
+    preprocessTiledMap(level)    
+}
 
 var screensize = new Vector(document.documentElement.clientWidth,document.documentElement.clientHeight)
 var crret = createCanvas(screensize.x,screensize.y)
@@ -52,14 +60,32 @@ var {canvas,ctxt} = crret
 console.log('here')
 var tilesize = new Vector(tiledmap.tilewidth,tiledmap.tileheight)
 
-
-
+declare var Howl;
+var riflesound = new Howl({
+    src:['sounds/rifle.wav'],
+    volume:0.5,
+})
+var lasersound = new Howl({
+    src:['sounds/laser.wav'],
+    volume:0.5,
+})
+var shotgunsound = new Howl({
+    src:['sounds/shotgun.wav'],
+    volume:0.5,
+})
+var pistolsound = new Howl({
+    src:['sounds/pistol.wav'],
+    volume:0.5,
+})
 var halfsize = tilesize.c().scale(0.5)
 
-var player = new Player({
+var player = new Entity({
     pos:new Vector(0,0),
-    speed:200,
-    rect:Rect.fromsize(new Vector(0,0), new Vector(30,60))
+    rect:Rect.fromsize(new Vector(0,0), new Vector(30,60)),
+    data:new Player({
+        speed:200,
+
+    })
 })
 var entitys:Entity<any>[] = []
 var camera = new Camera(ctxt)
@@ -70,63 +96,40 @@ var camera = new Camera(ctxt)
 document.addEventListener('keydown',(e) => {
     if(e.key == 'f'){
 
-        //interact with the entity below you
-        //check if it's a bit entity
-        // spawnParticles(player.pos,3,20)
     }
 })
 
 class Bullet{
     vel:Vector
+    isBitBullet = false
 }
 
+
+var mousebuttons = []
+var mousebuttonsPressed = []
+
+var mousepos = new Vector(0,0)
+document.addEventListener('mousemove', e => {
+    mousepos = getMousePos(canvas,e)
+})
 document.addEventListener('mousedown', e => {
-    var mouse = camera.screen2world(getMousePos(canvas,e))
-    var bulletspeed = 700;
-    
-
-    entitys.push(new Entity<Bullet>({
-        pos:player.pos.c(),
-        type:'bullet',
-        createdAt:time,
-        updatecb(self) {
-            var age = to(self.createdAt,time)
-            if(age > 4){
-                self.markedForDeletion
-                return 
-            }
-            self.pos.add(self.data.vel.c().scale(globaldt))
-
-            var bulletrect = Rect.fromCenter(self.pos, new Vector(5,5))
-            var hitbit:Entity<Bit> = collisionCheckEntitys(bulletrect, 'bit')
-            
-            if(collissionCheckWorld(bulletrect)){
-                self.markedForDeletion = true
-            }
-            if(hitbit){
-                self.markedForDeletion = true
-                hitbit.data.flip()
-            }
-            //check if it hit anything
-            //if so, particle effect
-        },
-        drawcb(self) {
-            ctxt.fillStyle = 'red'
-            fillRect(self.pos,new Vector(5,5),true)
-        },
-        data:{
-            vel:player.pos.to(mouse).normalize().scale(bulletspeed),
-        }
-    }))
-
-    entitys.push()
+    mousebuttonsPressed[e.button] = true
+    mousebuttons[e.button] = true
 })
 
-preprocessTiledMap(tiledmap)
-loadLevel1()
+document.addEventListener('mouseup', e => {
+    mousebuttons[e.button] = false
+})
+
+var loadlevelcallbacks = [loadLevel1,loadLevel2,loadLevel3,loadMenulevel]
+
+loadlevelcallbacks[levelindex]()
+
+
 var globaldt = 0;
 var time = 0;
 loop((dt) => {
+
     dt = clamp(dt,1/144,1/30)
     globaldt = dt;
     time += dt;
@@ -153,32 +156,51 @@ loop((dt) => {
     if(dir.length() > 0){
         dir.normalize()
     }
-    var oldpos = player.pos.c()
-    player.pos.add(dir.scale(player.speed * dt))
-    var playerrectsize = player.rect.size()
-    var halfsize = playerrectsize.c().scale(0.5)
-    player.rect.moveTo(player.pos.c().sub(halfsize))
-    if(collissionCheckWorld(player.rect)){
-        player.pos.overwrite(oldpos)
-    }
+    moveEntity(player,dir.scale(player.data.speed * dt))
+
+    playercb(player)
     for(var entity of entitys){
         entity.updatecb?.(entity)
     }
     entitys = entitys.filter(e => e.markedForDeletion == false)
     
-    ctxt.globalAlpha = 1
     camera.pos.overwrite(player.pos)
     camera.begin()
         renderTiled(tiledmap)
 
         for(var entity of entitys){
+            ctxt.globalAlpha = 1
             entity.drawcb?.(entity)
         }
+        ctxt.globalAlpha = 1
         ctxt.fillStyle = 'red'
         fillRect(player.pos,player.rect.size(),true)
 
     camera.end()
+    mousebuttonsPressed.fill(false)
 })
+
+function moveEntity(entity:Entity<any>,vel:Vector){
+    var oldpos = entity.pos.c()
+    if(vel.x == 0 && vel.y == 0){
+        return
+    }
+
+    entity.pos.x += vel.x
+    entity.rect.moveToCentered(entity.pos)
+    if(collissionCheckWorld(entity.rect)){
+        entity.pos.x = oldpos.x
+        entity.rect.moveToCentered(entity.pos)
+    }
+
+
+    entity.pos.y += vel.y
+    entity.rect.moveToCentered(entity.pos)
+    if(collissionCheckWorld(entity.rect)){
+        entity.pos.y = oldpos.y
+        entity.rect.moveToCentered(entity.pos)
+    }
+}
 
 
 

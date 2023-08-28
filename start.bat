@@ -1,6 +1,6 @@
-start tsc --watch
-start index.html
+@REM start tsc --watch
+@REM start index.html
 
-@REM start tsc
-@REM start node .\server.js
-@REM start http://localhost:8000/
+start tsc --watch
+start node .\server.js
+start http://localhost:8000/

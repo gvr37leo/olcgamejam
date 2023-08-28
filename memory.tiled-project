@@ -8,9 +8,26 @@
     ],
     "propertyTypes": [
         {
+            "color": "#ffaa0000",
+            "id": 5,
+            "members": [
+            ],
+            "name": "enemy",
+            "type": "class",
+            "useAs": [
+                "property",
+                "object"
+            ]
+        },
+        {
             "color": "#ffff0000",
             "id": 4,
             "members": [
+                {
+                    "name": "dstlevel",
+                    "type": "int",
+                    "value": -1
+                }
             ],
             "name": "flag",
             "type": "class",

@@ -63,8 +63,14 @@ function renderTiled(tiledData){
 
                 if(layer.objects){
                     for(var object of layer.objects){
-                        ctxt.fillStyle = 'green'
-                        fillRect(object.pos,tiledData.tilesize,true)
+                        if(object.text){
+                            ctxt.fillStyle = 'black'
+                            ctxt.font = '30px Arial'
+                            ctxt.fillText(object.text.text,object.x,object.y)
+                        }else{
+                            ctxt.fillStyle = 'green'
+                            fillRect(object.pos,tiledData.tilesize,true)
+                        }
                     }
                 }
             }

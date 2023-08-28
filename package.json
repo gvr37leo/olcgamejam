@@ -4,9 +4,8 @@
   "description": "",
   "main": "package.js",
   "dependencies": {
-    "express": "*"
+    "express": "^4.18.2"
   },
-  "devDependencies": {},
   "scripts": {
     "test": "echo \"Error: no test specified\" && exit 1"
   },

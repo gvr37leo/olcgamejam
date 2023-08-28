@@ -1,16 +1,17 @@
 
-function initBits(pos:Vector,array:number[]){
-    var res = []
-    for(var i = 0; i < array.length;i++){
+function initBits(pos:Vector,array:number[],vertical = false,start = 0,end = -1){
+    if(end == -1){
+        end = array.length
+    }
+    pos = pos.c()
+    var res:Entity<Bit>[] = []
+    for(var i = start; i < array.length && i < end;i++){
         entitys.push(new Entity<Bit>({
             pos:pos.c(),
             rect:Rect.fromsize(pos,tilesize),
             type:'bit',
             updatecb(self) {
-                var bit:Bit = self.data
-                if(0){
-                    bit.flip()
-                }
+                
             },
             drawcb(self) {
                 var bit:Bit = self.data
@@ -18,9 +19,9 @@ function initBits(pos:Vector,array:number[]){
                 ctxt.textAlign = 'center'
                 ctxt.textBaseline = 'middle'
                 ctxt.font = '30px Arial'
-                ctxt.fillStyle = bit.get() ? 'black' : 'white'
-                fillRect(self.pos,tilesize)
                 ctxt.fillStyle = bit.get() ? 'white' : 'black'
+                fillRect(self.pos,tilesize)
+                ctxt.fillStyle = bit.get() ? 'black' : 'white'
                 ctxt.fillText(bit.get().toString(),self.pos.x + halfsize.x,self.pos.y + halfsize.y + 3)
             },
             data:new Bit({
@@ -28,7 +29,11 @@ function initBits(pos:Vector,array:number[]){
                 index:i,
             })
         }))
-        pos.x += tilesize.x
+        if(vertical){
+            pos.y += tilesize.y
+        }else{
+            pos.x += tilesize.x
+        }
         res.push(last(entitys))
     }
     return res
@@ -44,20 +49,16 @@ function fillRect(pos:Vector,size:Vector,centered=false){
 class Particle{
     vel:Vector
     acc:Vector
+    text
 
     constructor(data:Partial<Particle>){
         Object.assign(this,data)
     }
 }
 
-function spawnBitParticles(pos:Vector,duration,amountPerSecond){
-    // var particles:Entity[] = []
-    // var rng = new RNG(0)
-    https://w7.pngwing.com/pngs/877/720/png-transparent-explosion-sprite-pixel-art-particle-background-orange-video-game-desktop-wallpaper-thumbnail.png
-    var fireimage = new Image()
-    // fireimage.src = 'res/explosion.png'
-    fireimage.src = 'res/blood.png'
-
+function spawnBitParticles(pos:Vector){
+    var duration = 0.1
+    var amountPerSecond = 1000
     var lifespan = 2
     var handle = setInterval(() => {
         entitys.push(new Entity({
@@ -75,17 +76,16 @@ function spawnBitParticles(pos:Vector,duration,amountPerSecond){
             drawcb:(self) => {
                 var age = to(self.createdAt,time)
                 var completion = inverseLerp(age,0,lifespan)
-                ctxt.fillStyle = 'red'
-                
+                ctxt.fillStyle = 'white'
+                ctxt.font = '16px Arial'
                 ctxt.globalAlpha = 1 - tween(completion,0,0)
-                rotStart(self.pos.c().add(new Vector(10,10)),completion * 6)
-                ctxt.drawImage(fireimage,self.pos.x,self.pos.y,20,20)
-                rotEnd()
-                // ctxt.fillRect(self.pos.x,self.pos.y,20,20)
+                
+                ctxt.fillText(self.data.text,self.pos.x,self.pos.y)
             },
             data:new Particle({
-                vel:new Vector(rng.range(-50,50), -200),
-                acc:new Vector(0, 400),
+                vel:new Vector(rng.range(-50,50), rng.range(-50,50)),
+                acc:new Vector(0, 0),
+                text:rng.choose(['0','1']),
             })
         }))
     }, 1000 / amountPerSecond )
@@ -161,7 +161,7 @@ function drawImage(image,pos:Vector,size:Vector,centered = false){
 function drawImage2(image,src:Rect,dst:Rect){
     var srcsize = src.size()
     var dstsize = dst.size()
-    ctxt.drawImage(image,src.min.x,src.min.y,srcsize.x,srcsize.y,dst.min.x,dst.min.y,dstsize.x + 1,dstsize.y + 1)
+    ctxt.drawImage(image,src.min.x,src.min.y,srcsize.x,srcsize.y,dst.min.x-0.5,dst.min.y-0.5,dstsize.x+1,dstsize.y+1)
 }
 
 function loadImage(src){
@@ -172,6 +172,10 @@ function loadImage(src){
 
 function index2Vector(index, width) {
     return new Vector(index % width,Math.floor(index / width));
+}
+
+function vector2index(v, width) {
+    return v.y * width + v.x;
 }
 
 

@@ -3,7 +3,7 @@
         "height": 4300,
         "width": 2
     },
-    "activeFile": "tiles.js",
+    "activeFile": "level2.js",
     "expandedProjectPaths": [
         "."
     ],
@@ -13,6 +13,114 @@
             "scaleInEditor": 1
         },
         ":/automap-tiles.tsx": {
+            "scaleInDock": 1
+        },
+        "level1.js": {
+            "expandedObjectLayers": [
+                2
+            ],
+            "scale": 1,
+            "selectedLayer": 1,
+            "viewCenter": {
+                "x": 2460.5,
+                "y": 1092
+            }
+        },
+        "level1.js#TX Props": {
+            "scaleInDock": 0.75
+        },
+        "level1.js#TX Tileset Grass": {
+            "scaleInDock": 0.5
+        },
+        "level1.js#TX Tileset Stone Ground": {
+            "scaleInDock": 1,
+            "scaleInEditor": 1
+        },
+        "level1.js#TX Tileset Wall": {
+            "scaleInDock": 1
+        },
+        "level1.js#memoryworld": {
+            "scaleInDock": 1
+        },
+        "level2.js": {
+            "expandedObjectLayers": [
+                2
+            ],
+            "scale": 0.5,
+            "selectedLayer": 1,
+            "viewCenter": {
+                "x": 1385,
+                "y": 1314
+            }
+        },
+        "level2.js#TX Tileset Grass": {
+            "scaleInDock": 1
+        },
+        "level2.js#TX Tileset Stone Ground": {
+            "scaleInDock": 1
+        },
+        "level2.js#memoryworld": {
+            "scaleInDock": 1,
+            "scaleInEditor": 1
+        },
+        "level3.js": {
+            "expandedObjectLayers": [
+                2
+            ],
+            "scale": 0.33,
+            "selectedLayer": 1,
+            "viewCenter": {
+                "x": 1571.212121212121,
+                "y": 1530.3030303030305
+            }
+        },
+        "level3.js#TX Tileset Grass": {
+            "scaleInDock": 1
+        },
+        "level3.js#TX Tileset Stone Ground": {
+            "scaleInDock": 1
+        },
+        "levels/level1.js": {
+            "scale": 0.0623779296875,
+            "selectedLayer": 0,
+            "viewCenter": {
+                "x": 4801.377690802348,
+                "y": 4785.346379647748
+            }
+        },
+        "levels/level1.js#TX Props": {
+            "scaleInDock": 1
+        },
+        "levels/level1.js#TX Tileset Grass": {
+            "scaleInDock": 1
+        },
+        "levels/level1.js#TX Tileset Stone Ground": {
+            "scaleInDock": 1
+        },
+        "levels/level1.js#TX Tileset Wall": {
+            "scaleInDock": 1
+        },
+        "levels/level1.js#memoryworld": {
+            "scaleInDock": 1
+        },
+        "menulevel.js": {
+            "expandedObjectLayers": [
+                2
+            ],
+            "scale": 1.5,
+            "selectedLayer": 1,
+            "viewCenter": {
+                "x": 1525.6666666666665,
+                "y": 1738.6666666666665
+            }
+        },
+        "menulevel.js#TX Tileset Grass": {
+            "scaleInDock": 1
+        },
+        "menulevel.js#TX Tileset Stone Ground": {
+            "scaleInDock": 1
+        },
+        "menulevel.js#memoryworld": {
             "scaleInDock": 1
         },
         "testmap.js": {
@@ -33,11 +141,11 @@
             "scaleInDock": 0.75
         },
         "tiles.js": {
-            "scale": 0.0625,
+            "scale": 0.33,
             "selectedLayer": 0,
             "viewCenter": {
-                "x": 4072,
-                "y": 4736
+                "x": 1146.969696969697,
+                "y": 751.5151515151516
             }
         },
         "tiles.js#TX Props": {
@@ -63,16 +171,23 @@
         }
     },
     "last.imagePath": "C:/projects/olcgamejam/res",
-    "map.height": 20,
+    "map.height": 100,
     "map.lastUsedFormat": "js",
-    "map.width": 20,
+    "map.width": 100,
     "openFiles": [
-        "tiles.js"
+        "level1.js",
+        "level3.js",
+        "tiles.js",
+        "level2.js"
     ],
     "project": "memory.tiled-project",
+    "property.type": "int",
     "recentFiles": [
-        "testmap.js",
-        "tiles.js"
+        "level1.js",
+        "level3.js",
+        "tiles.js",
+        "level2.js",
+        "testmap.js"
     ],
     "tileset.embedInMap": true,
     "tileset.type": 0

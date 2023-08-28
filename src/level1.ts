@@ -1,22 +1,22 @@
 
-var level1memory = [0,0,0,0,1,0,0,1,1,0]
+// var level1memory1 = [1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1]
+// var level1memory2 = [1,1,1,1,1,1,1,1,1,1,1]
+// var level1memory3 = [1,1,1,1,1,1,1,1,1,1,1]
+// var level1memory4 = [1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1]
+// var level1memory5 = [1,1,1,1,1,1,1,1,1,1,1]
+
+
 
 function loadLevel1(){
 
-    var bits = initBits(new Vector(80,120),level1memory)
+    
+    //have 5 arrays of memory
+    //corresponding to the 5 walls in game
+
+    loadWallsIntoBits(findObjectWithName('mark1').pos,findObjectWithName('mark2').pos,findObjectWithName('ref1').pos,348,1)
     movePlayerToSpawn()
     loadTeleports()
     loadFlag()
-
-
-    entitys.push(new Entity({
-        updatecb(self) {
-            
-            // world.map[0] = level1memory.map(v => v == 1 ? 'X' : '0').join('')
-
-            
-        },
-    }))
 }
 
 function movePlayerToSpawn(){
@@ -31,33 +31,89 @@ function loadTeleports(){
             updatecb(self) {
                 if(player.rect.collideBox(Rect.fromCenter(self.pos,tilesize))){
                     player.pos = findObjectWithId(object.dst).pos.c()
+                    player.data.inBitWorld = !player.data.inBitWorld
                 }
             },
             drawcb(self) {
                 ctxt.fillStyle = 'purple'
-                fillRect(self.pos,tilesize)
+                fillRect(self.pos,tilesize,true)
             },
         }))
     }
 }
 
 function loadFlag(){
-    var flagpos = findObjectsOfType('flag')[0].pos
-    entitys.push(new Entity({
-        type:'flag',
-        pos:flagpos,
-        rect:Rect.fromCenter(flagpos,tilesize),
-        updatecb(self) {
-            if(collisionCheckEntitys(player.rect,'flag')){
-                entitys = []
-                loadLevel2()//todo should always load level2
-            }
-        },
-        drawcb(self) {
-            ctxt.fillStyle = 'red'
-            fillRect(self.pos,tilesize)
-        },
-    }))
+    for(let flagobject of findObjectsOfType('flag')){
+        let flagpos = flagobject.pos
+        entitys.push(new Entity({
+            type:'flag',
+            pos:flagpos,
+            rect:Rect.fromCenter(flagpos,tilesize),
+            updatecb(self) {
+                if(self.rect.collideBox(player.rect)){
+                    switchLevel(self.data.dstlevel)
+                }
+            },
+            drawcb(self) {
+                ctxt.fillStyle = 'red'
+                fillRect(self.pos,tilesize,true)
+            },
+            data:flagobject
+        }))
+    }
+}
+
+function drawAtlasImage(absdstpos:Vector,srctile:Vector,tilesize:Vector,image){
+    var abssrc = srctile.c().mul(tilesize)
+    ctxt.drawImage(image,abssrc.x,abssrc.y,tilesize.x,tilesize.y,absdstpos.x,absdstpos.y,tilesize.x,tilesize.y)
+}
+
+
+function switchLevel(index){
+    //reset mapdata
+    entitys = []
+    tiledmap = levels[index]
+    loadlevelcallbacks[index]()
+}
+
+function loadWallsIntoBits(wallstl:Vector,wallsbr:Vector,destination:Vector,wallgid:number,grassgid){
+    var res:Entity<Bit>[] = []
+    wallstl.to(wallsbr).div(tilesize).add(new Vector(1,1)).loop(v => {
+        var absrel = v.c().mul(tilesize)
+        var abspos = absrel.c().add(wallstl)
+        var index = vector2index(abspos.c().div(tilesize),tiledmap.width)
+        var gid = tiledmap.layers[0].data[index]
+        if(gid != wallgid){
+            return
+        }
+        var bitpos = destination.c().add(v.c().mul(tilesize))
+        entitys.push(new Entity<Bit>({
+            pos:bitpos,
+            rect:Rect.fromsize(bitpos,tilesize),
+            type:'bit',
+            updatecb(self) {
+                var index = vector2index(abspos.c().div(tilesize),tiledmap.width)
+                tiledmap.layers[0].data[index] = self.data.get() == 1 ? wallgid : grassgid
+            },
+            drawcb(self) {
+                var bit:Bit = self.data
+                ctxt.textAlign = 'center'
+                ctxt.textBaseline = 'middle'
+                ctxt.font = '30px Arial'
+                ctxt.fillStyle = bit.get() ? 'white' : 'black'
+                fillRect(self.pos,tilesize)
+                ctxt.fillStyle = bit.get() ? 'black' : 'white'
+                ctxt.fillText(bit.get().toString(),self.pos.x + halfsize.x,self.pos.y + halfsize.y + 3)
+            },
+            data:new Bit({
+                array:[1],
+                index:0,
+            })
+        }))
+        res.push(last(entitys))
+    })
+
+    return res
 }
 
 function findObjectsOfType(type){
@@ -82,3 +138,15 @@ function findObjectWithId(id){
     }
     return null
 }
+
+function findObjectWithName(name){
+    for(var layer of tiledmap.layers){
+        for(var object of layer.objects ?? []){
+            if(object.name == name){
+                return object
+            }
+        }
+    }
+    return null
+}
+

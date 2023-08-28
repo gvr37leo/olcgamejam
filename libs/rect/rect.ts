@@ -9,7 +9,7 @@ class Rect{
     }
 
     static fromCenter(center:Vector,size:Vector){
-        var halfsize = size.c()
+        var halfsize = size.c().scale(0.5)
         var pos = center.c().sub(halfsize)
         return new Rect(pos.c(),pos.c().add(size))
     }
@@ -49,6 +49,11 @@ class Rect{
         var size = this.size()
         this.min = pos.c()
         this.max = this.min.c().add(size)
+    }
+
+    moveToCentered(pos:Vector){
+        var halfsize = this.size().scale(0.5)
+        this.moveTo(pos.c().sub(halfsize))
     }
 
     loop(callback:(v:Vector)=>void){

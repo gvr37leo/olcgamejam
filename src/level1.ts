@@ -16,7 +16,12 @@ function loadLevel1(){
     loadWallsIntoBits(findObjectWithName('mark1').pos,findObjectWithName('mark2').pos,findObjectWithName('ref1').pos,348,1)
     movePlayerToSpawn()
     loadTeleports()
-    loadFlag()
+    loadFlags()
+    entitys.push(new Entity({
+        updatecb(self) {
+            player.data.gun.setProp('ammo',6)
+        },
+    }))
 }
 
 function movePlayerToSpawn(){
@@ -24,55 +29,80 @@ function movePlayerToSpawn(){
 }
 
 function loadTeleports(){
+    var tpcooldown = new Cooldown(4)
     for(let object of findObjectsOfType('teleporter')){
         entitys.push(new Entity({
             type:'teleporter',
             pos:object.pos.c(),
+            rect:Rect.fromCenter(object.pos.c(),tilesize),
             updatecb(self) {
-                if(player.rect.collideBox(Rect.fromCenter(self.pos,tilesize))){
+                tpcooldown.update(globaldt)
+                if(player.rect.collideBox(self.rect) && tpcooldown.tryfire()){
+                    teleportsound.play()
                     player.pos = findObjectWithId(object.dst).pos.c()
+                    player.rect.moveToCentered(player.pos)
                     player.data.inBitWorld = !player.data.inBitWorld
+
+                    if(player.data.inBitWorld){
+                        bitmusic.play()
+                        normalmusic.pause()
+                    }else{
+                        bitmusic.pause()
+                        normalmusic.play()
+                    }
                 }
             },
             drawcb(self) {
-                ctxt.fillStyle = 'purple'
-                fillRect(self.pos,tilesize,true)
+                drawAtlasImage(self.pos.c().sub(halfsize),new Vector(1,2),tilesize,memoryimage)
             },
         }))
     }
 }
 
-function loadFlag(){
+function loadFlags(){
+    var res = []
     for(let flagobject of findObjectsOfType('flag')){
         let flagpos = flagobject.pos
+        flagobject.enabled = true
         entitys.push(new Entity({
             type:'flag',
             pos:flagpos,
             rect:Rect.fromCenter(flagpos,tilesize),
             updatecb(self) {
-                if(self.rect.collideBox(player.rect)){
+
+                if(self.data.isMenuFlag){
+                    if(self.data.enabled && self.rect.collideBox(player.rect)){
+                        switchLevel(self.data.dstlevel)
+                        levelunlocked[self.data.dstlevel] = true
+                    }
+                }else if(self.rect.collideBox(player.rect)){
                     switchLevel(self.data.dstlevel)
+                    levelunlocked[self.data.dstlevel] = true
                 }
             },
             drawcb(self) {
-                ctxt.fillStyle = 'red'
-                fillRect(self.pos,tilesize,true)
+                if(self.data.enabled){
+                    drawAtlasImage(self.pos.c().sub(halfsize),new Vector(2,2),tilesize,memoryimage)
+                }else{
+                    drawAtlasImage(self.pos.c().sub(halfsize),new Vector(0,2),tilesize,memoryimage)
+                }
+                // fillRect(self.pos,tilesize,true)
             },
             data:flagobject
         }))
+        res.push(last(entitys))
     }
+    return res
 }
 
-function drawAtlasImage(absdstpos:Vector,srctile:Vector,tilesize:Vector,image){
-    var abssrc = srctile.c().mul(tilesize)
-    ctxt.drawImage(image,abssrc.x,abssrc.y,tilesize.x,tilesize.y,absdstpos.x,absdstpos.y,tilesize.x,tilesize.y)
-}
+
 
 
 function switchLevel(index){
     //reset mapdata
     entitys = []
     tiledmap = levels[index]
+    tiledmap.layers[0].data = tiledmap.layers[0].backup.slice()
     loadlevelcallbacks[index]()
 }
 

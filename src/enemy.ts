@@ -7,8 +7,10 @@ class Enemy{
     health
 
     attackcd = new Cooldown(1)
+    changepos:Vector
 
     constructor(incdata:Partial<Enemy>){
+        Object.assign(this,incdata)
         this.data = new Array<number>(12)
         for(var key in incdata){
             this.setProp(key,incdata[key])

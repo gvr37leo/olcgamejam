@@ -11,7 +11,7 @@ class Gun{
 
     data:number[] = []
 
-    damage
+    ammo
     firerate
     bulletspeed
 
@@ -26,21 +26,27 @@ class Gun{
 
     props:Prop[] = [
         new Prop({
-            name:'damage',
-            size:4,
+            name:'ammo',
+            size:8,
         }),
         new Prop({
             name:'firerate',
             size:4,
         }),
-        new Prop({
-            name:'bulletspeed',
-            size:4,
-        }),
     ]
 
 
+
+    inc(name){
+        this.setProp(name,this.getProp(name) + 1)
+    }
+
+    decr(name){
+        this.setProp(name,this.getProp(name) - 1)
+    }
+
     setProp(name,value){
+        this[name] = value
         var offset = 0
         for(var prop of this.props){
             if(prop.name == name){

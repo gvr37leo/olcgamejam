@@ -57,10 +57,9 @@ class Particle{
 }
 
 function spawnBitParticles(pos:Vector){
-    var duration = 0.1
-    var amountPerSecond = 1000
     var lifespan = 2
-    var handle = setInterval(() => {
+
+    for(var i = 0; i < 20;i++){
         entitys.push(new Entity({
             pos:pos.c(),
             createdAt:time,
@@ -88,11 +87,39 @@ function spawnBitParticles(pos:Vector){
                 text:rng.choose(['0','1']),
             })
         }))
-    }, 1000 / amountPerSecond )
-    setTimeout(() => {
-        clearInterval(handle)
-    },duration * 1000)
+    }
 }
+
+function spawnFireParticles(pos:Vector,vel){
+    var lifespan = 2
+    for(var i = 0; i < 20;i++){
+        entitys.push(new Entity({
+            pos:pos.c(),
+            createdAt:time,
+            updatecb:(self) => {
+                var particle:Particle = self.data
+                particle.vel.add(particle.acc.c().scale(globaldt))
+                self.pos.add(particle.vel.c().scale(globaldt))
+                var age = to(self.createdAt,time)
+                if(age > lifespan){
+                    self.markedForDeletion = true
+                }
+            },
+            drawcb:(self) => {
+                var age = to(self.createdAt,time)
+                var completion = inverseLerp(age,0,lifespan)
+                ctxt.globalAlpha = 1 - tween(completion,0,0)
+                
+                drawAnimation(self.pos,fireballAnimation,time)
+            },
+            data:new Particle({
+                vel:new Vector(rng.range(-50,50), rng.range(-20,20)).add(vel.c().scale(0.2)),
+                acc:new Vector(0, -50),
+            })
+        }))
+    }
+}
+
 
 function collissionCheck(rect:Rect,type){
 

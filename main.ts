@@ -19,37 +19,33 @@
 /// <reference path="src/cooldown.ts" />
 /// <reference path="src/gun.ts" />
 /// <reference path="src/entity.ts" />
+/// <reference path="src/animation.ts" />
 /// <reference path="src/player.ts" />
 /// <reference path="src/tiled.js" />
 /// <reference path="src/level1.ts" />
 /// <reference path="src/level2.ts" />
 /// <reference path="src/level3.ts" />
 /// <reference path="src/menulevel.ts" />
+/// <reference path="src/finishedlevel.ts" />
 
 
 
-//idea for memory game
-
-//puzzle/shooter game
-//you can walk through the memory of the computer
-//stuff like enemies,your gun, your ammo, the map are visible as 1's and 0's on the map
-//goal of the game is get to the flag
-//limited amount of memory changes
-//readonly memory
+//todo
+//last 4 bits on level3
+//testupload to see how it looks on itch.io
+//write description
+//record video with playthrough
 
 
-//level 1 = edit the map to remove walls, //button to switch to the memory world,teleport?
-//level 2 = edit your gun to shoot faster, and do more damage
-//level 3 = edit the enemies to have less health, be slower, or set the array to zero
-//level 4 = bring it all together
 
-//
-//todo cooldown for teleporter and gun and enemy attack
-var memoryimage = loadImage('res/memomryworld.png')
+var drawdebuggraphics = location.hostname === "localhost"
+var memoryimage = loadImage('res/memoryworld.png')
 var TileMaps:any
-var levels = [TileMaps.level1,TileMaps.level2,TileMaps.level3,TileMaps.menulevel]
+var levels = [TileMaps.level1,TileMaps.level2,TileMaps.level3,TileMaps.menulevel,TileMaps.finished]
 var levelindex = 3
 var tiledmap = levels[levelindex]
+
+var levelunlocked = drawdebuggraphics ? [true,true,true,true] : [true,false,false,true]
 for(var level of levels){
     preprocessTiledMap(level)    
 }
@@ -77,11 +73,74 @@ var pistolsound = new Howl({
     src:['sounds/pistol.wav'],
     volume:0.5,
 })
+var fireballsound = new Howl({
+    src:['sounds/fireball.wav'],
+    volume:1,
+})
+var bitmusic = new Howl({
+    src:['sounds/bitmusic.wav'],
+    volume:1,
+    loop:true,
+})
+var normalmusic = new Howl({
+    src:['sounds/normalmusic.mp3'],
+    volume:1,
+    loop:true,
+})
+var teleportsound = new Howl({
+    src:['sounds/teleport.wav'],
+    volume:1,
+})
+var witchRunAnimation = new SpriteAnimation({
+    imageatlas:loadImage('animations/B_witch_run.png'),
+    startpos:new Vector(0,0),
+    direction:new Vector(0,1),
+    framecount:8,
+    duration:1,
+    spritesize:new Vector(32,48)
+})
+var witchIdleAnimation = new SpriteAnimation({
+    imageatlas:loadImage('animations/B_witch_idle.png'),
+    startpos:new Vector(0,0),
+    direction:new Vector(0,1),
+    framecount:6,
+    duration:1,
+    spritesize:new Vector(32,48)
+})
+var fireballAnimation = new SpriteAnimation({
+    imageatlas:loadImage('animations/All_Fire_Bullet_Pixel_16x16.png'),
+    startpos:new Vector(0,14),
+    direction:new Vector(1,0),
+    framecount:5,
+    duration:0.4,
+    spritesize:new Vector(16,16)
+})
+var skeletonWalkAnimation = new SpriteAnimation({
+    imageatlas:loadImage('animations/Skeleton enemy.png'),
+    startpos:new Vector(0,2),
+    direction:new Vector(1,0),
+    framecount:12,
+    duration:1,
+    spritesize:new Vector(64,64)
+})
+var skeletonIdleAnimation = new SpriteAnimation({
+    imageatlas:loadImage('animations/Skeleton enemy.png'),
+    startpos:new Vector(0,3),
+    direction:new Vector(1,0),
+    framecount:4,
+    duration:1,
+    spritesize:new Vector(64,64)
+}) 
+
+
+var flipx = false
+var currentanimation = witchRunAnimation
+
 var halfsize = tilesize.c().scale(0.5)
 
 var player = new Entity({
     pos:new Vector(0,0),
-    rect:Rect.fromsize(new Vector(0,0), new Vector(30,60)),
+    rect:Rect.fromsize(new Vector(0,0), new Vector(26,48)),
     data:new Player({
         speed:200,
 
@@ -121,10 +180,10 @@ document.addEventListener('mouseup', e => {
     mousebuttons[e.button] = false
 })
 
-var loadlevelcallbacks = [loadLevel1,loadLevel2,loadLevel3,loadMenulevel]
+var loadlevelcallbacks = [loadLevel1,loadLevel2,loadLevel3,loadMenulevel,loadFinishedLevel]
 
 loadlevelcallbacks[levelindex]()
-
+normalmusic.play()
 
 var globaldt = 0;
 var time = 0;
@@ -149,36 +208,73 @@ loop((dt) => {
     }
     if(keys['a']){
         dir.x--
+        flipx = true
     }
     if(keys['d']){
         dir.x++
+        flipx = false
     }
     if(dir.length() > 0){
         dir.normalize()
+        currentanimation = witchRunAnimation
+    }else{
+        currentanimation = witchIdleAnimation
     }
     moveEntity(player,dir.scale(player.data.speed * dt))
 
     playercb(player)
     for(var entity of entitys){
+        if(entity.markedForDeletion){
+            continue
+        }
         entity.updatecb?.(entity)
     }
     entitys = entitys.filter(e => e.markedForDeletion == false)
     
     camera.pos.overwrite(player.pos)
+    // camera.scale = new Vector(1,1)
     camera.begin()
         renderTiled(tiledmap)
 
         for(var entity of entitys){
             ctxt.globalAlpha = 1
+            if(entity.markedForDeletion){
+                continue
+            }
             entity.drawcb?.(entity)
+        }
+        if(drawdebuggraphics){
+            ctxt.globalAlpha = 1
+            ctxt.strokeStyle = 'magenta'
+            for(var entity of entitys){
+                if(entity.rect){
+                    drawRectBorder(entity.rect)
+                }                
+            }
         }
         ctxt.globalAlpha = 1
         ctxt.fillStyle = 'red'
-        fillRect(player.pos,player.rect.size(),true)
+        if(player.data.inBitWorld){
+            ctxt.strokeStyle = 'white'
+            drawRectBorder(player.rect)
+        }else{
+            drawAnimation(player.pos,currentanimation,time,flipx,true)
+        }
+        // fillRect(player.pos,player.rect.size(),true)
 
     camera.end()
     mousebuttonsPressed.fill(false)
 })
+
+function drawRectBorder(rect:Rect){
+    ctxt.beginPath()
+    ctxt.moveTo(rect.min.x + 0.5,rect.min.y + 0.5)
+    ctxt.lineTo(rect.max.x + 0.5,rect.min.y + 0.5)
+    ctxt.lineTo(rect.max.x + 0.5,rect.max.y + 0.5)
+    ctxt.lineTo(rect.min.x + 0.5,rect.max.y + 0.5)
+    ctxt.closePath()
+    ctxt.stroke()
+}
 
 function moveEntity(entity:Entity<any>,vel:Vector){
     var oldpos = entity.pos.c()
@@ -201,6 +297,7 @@ function moveEntity(entity:Entity<any>,vel:Vector){
         entity.rect.moveToCentered(entity.pos)
     }
 }
+
 
 
 

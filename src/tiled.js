@@ -39,7 +39,7 @@ function renderTiled(tiledData){
                     var tile = tileset.tilesdict[lid]
                     if(tile?.animation){
                         var animduration = tile.animation.reduce((p,c) => p + c.duration,0) / 1000
-                        var localtime = elapsedTime % animduration
+                        var localtime = time % animduration
                         var frame = Math.floor(localtime / 0.1)
                         lid = tile.animation[frame].tileid
                     }
@@ -68,8 +68,10 @@ function renderTiled(tiledData){
                             ctxt.font = '30px Arial'
                             ctxt.fillText(object.text.text,object.x,object.y)
                         }else{
-                            ctxt.fillStyle = 'green'
-                            fillRect(object.pos,tiledData.tilesize,true)
+                            if(drawdebuggraphics){
+                                ctxt.fillStyle = 'green'
+                                fillRect(object.pos,tiledData.tilesize,true)
+                            }
                         }
                     }
                 }
@@ -85,6 +87,10 @@ function preprocessTiledMap(tiledmap){
     tiledmap.size = new Vector(tiledmap.width,tiledmap.height)
 
     for(var layer of tiledmap.layers){
+        if(layer.data){
+            layer.backup = layer.data.slice()
+        }
+
         if(layer.objects){
             for(var object of layer.objects){
                 object.pos = new Vector(object.x,object.y)

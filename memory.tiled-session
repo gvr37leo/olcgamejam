@@ -5,8 +5,8 @@
     },
     "activeFile": "level3.js",
     "expandedProjectPaths": [
-        ".",
-        "levels"
+        "levels",
+        "."
     ],
     "fileStates": {
         "": {
@@ -21,15 +21,19 @@
             "scaleInEditor": 1
         },
         "finished.js": {
-            "scale": 1,
-            "selectedLayer": 1,
+            "expandedObjectLayers": [
+                2
+            ],
+            "scale": 0.25,
+            "selectedLayer": 0,
             "viewCenter": {
-                "x": 1583.5,
-                "y": 1662
+                "x": 2218,
+                "y": 2332
             }
         },
         "finished.js#TX Plant": {
-            "scaleInDock": 1
+            "scaleInDock": 1,
+            "scaleInEditor": 1
         },
         "finished.js#TX Props": {
             "scaleInDock": 0.75
@@ -47,11 +51,11 @@
             "expandedObjectLayers": [
                 2
             ],
-            "scale": 0.5,
-            "selectedLayer": 1,
+            "scale": 0.125,
+            "selectedLayer": 0,
             "viewCenter": {
-                "x": 2463,
-                "y": 1206
+                "x": 3116,
+                "y": 2864
             }
         },
         "level1.js#TX Props": {
@@ -74,15 +78,16 @@
             "expandedObjectLayers": [
                 2
             ],
-            "scale": 0.25,
-            "selectedLayer": 2,
+            "scale": 0.125,
+            "selectedLayer": 0,
             "viewCenter": {
-                "x": 1710,
-                "y": 2112
+                "x": 2308,
+                "y": 2832
             }
         },
         "level2.js#TX Props": {
-            "scaleInDock": 0.5
+            "scaleInDock": 0.5,
+            "scaleInEditor": 1
         },
         "level2.js#TX Tileset Grass": {
             "scaleInDock": 1
@@ -101,9 +106,12 @@
             "scale": 0.5,
             "selectedLayer": 1,
             "viewCenter": {
-                "x": 1419,
-                "y": 1360
+                "x": 1317,
+                "y": 1644
             }
+        },
+        "level3.js#TX Props": {
+            "scaleInDock": 0.5
         },
         "level3.js#TX Tileset Grass": {
             "scaleInDock": 1
@@ -146,8 +154,8 @@
             "scale": 0.5,
             "selectedLayer": 2,
             "viewCenter": {
-                "x": 1735,
-                "y": 1432
+                "x": 1733,
+                "y": 1430
             }
         },
         "menulevel.js#TX Props": {
@@ -217,17 +225,17 @@
         "level1.js",
         "level2.js",
         "level3.js",
-        "menulevel.js",
-        "testmap.js"
+        "menulevel.js"
     ],
     "project": "memory.tiled-project",
     "property.type": "int",
     "recentFiles": [
-        "testmap.js",
         "level1.js",
         "level2.js",
         "menulevel.js",
         "level3.js",
+        "finished.js",
+        "testmap.js",
         "TX Props.tsx",
         "levels/level1.js",
         "tiles.js"

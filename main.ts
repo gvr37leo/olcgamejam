@@ -38,7 +38,8 @@
 
 
 
-var drawdebuggraphics = location.hostname === "localhost"
+// var drawdebuggraphics = location.hostname === "localhost"
+var drawdebuggraphics = false
 var memoryimage = loadImage('res/memoryworld.png')
 var TileMaps:any
 var levels = [TileMaps.level1,TileMaps.level2,TileMaps.level3,TileMaps.menulevel,TileMaps.finished]
@@ -79,17 +80,17 @@ var fireballsound = new Howl({
 })
 var bitmusic = new Howl({
     src:['sounds/bitmusic.wav'],
-    volume:1,
+    volume:0.6,
     loop:true,
 })
 var normalmusic = new Howl({
     src:['sounds/normalmusic.mp3'],
-    volume:1,
+    volume:0.6,
     loop:true,
 })
 var teleportsound = new Howl({
     src:['sounds/teleport.wav'],
-    volume:1,
+    volume:0.6,
 })
 var witchRunAnimation = new SpriteAnimation({
     imageatlas:loadImage('animations/B_witch_run.png'),
@@ -140,7 +141,7 @@ var halfsize = tilesize.c().scale(0.5)
 
 var player = new Entity({
     pos:new Vector(0,0),
-    rect:Rect.fromsize(new Vector(0,0), new Vector(26,48)),
+    rect:Rect.fromsize(new Vector(0,0), new Vector(20,20)),
     data:new Player({
         speed:200,
 

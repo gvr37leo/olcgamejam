@@ -12,7 +12,7 @@ function loadLevel3(){
     loadTeleports()
     var enemys = loadEnemys()
     for(var enemy of enemys){
-        enemy.data.setProp('health',5)
+        enemy.data.setProp('health',9)
     }
     initBits(findObjectWithName('gunbits').pos,player.data.gun.data,false,0,8)
     loadWallsIntoBits(findObjectWithName('mark1').pos,findObjectWithName('mark2').pos,findObjectWithName('ref1').pos,92,1)

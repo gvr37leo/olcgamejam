@@ -65,6 +65,9 @@ function renderTiled(tiledData){
                     for(var object of layer.objects){
                         if(object.text){
                             ctxt.fillStyle = 'black'
+                            if(object.text.color){
+                                ctxt.fillStyle = object.text.color 
+                            }
                             ctxt.font = '30px Arial'
                             ctxt.fillText(object.text.text,object.x,object.y)
                         }else{

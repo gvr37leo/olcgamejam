@@ -36,13 +36,13 @@ function loadEnemys(){
         entitys.push(new Entity<Enemy>({
             type:'enemy',
             pos:object.pos.c(),
-            rect:Rect.fromCenter(object.pos.c(),new Vector(32,64)),
+            rect:Rect.fromCenter(object.pos.c(),new Vector(26,50)),
             updatecb(self) {
                 self.data.attackcd.update(globaldt)
                 
                 if(player.data.inBitWorld == false){
                     var oldpos = self.pos.c()
-                    moveEntity(self,self.pos.to(player.pos).normalize().scale(self.data.getProp('speed') * 50 * globaldt))
+                    moveEntity(self,self.pos.to(player.pos).normalize().scale(150 * globaldt))
                     self.data.changepos = oldpos.to(self.pos)
                 }
                 if(player.rect.collideBox(self.rect) && self.data.attackcd.tryfire()){

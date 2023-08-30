@@ -28,6 +28,7 @@ function movePlayerToSpawn(){
     player.pos = findObjectsOfType('spawn')[0].pos.c()
 }
 
+var spiralimage = loadImage('animations/spiral.png')
 function loadTeleports(){
     var tpcooldown = new Cooldown(4)
     for(let object of findObjectsOfType('teleporter')){
@@ -53,7 +54,10 @@ function loadTeleports(){
                 }
             },
             drawcb(self) {
-                drawAtlasImage(self.pos.c().sub(halfsize),new Vector(1,2),tilesize,memoryimage)
+                rotStart(self.pos,time)
+                drawImage(spiralimage,self.pos,tilesize,true)
+                // drawAtlasImage(self.pos.c().sub(halfsize),new Vector(1,2),tilesize,memoryimage)
+                rotEnd()
             },
         }))
     }
@@ -70,12 +74,7 @@ function loadFlags(){
             rect:Rect.fromCenter(flagpos,tilesize),
             updatecb(self) {
 
-                if(self.data.isMenuFlag){
-                    if(self.data.enabled && self.rect.collideBox(player.rect)){
-                        switchLevel(self.data.dstlevel)
-                        levelunlocked[self.data.dstlevel] = true
-                    }
-                }else if(self.rect.collideBox(player.rect)){
+                if(self.data.enabled && self.rect.collideBox(player.rect)){
                     switchLevel(self.data.dstlevel)
                     levelunlocked[self.data.dstlevel] = true
                 }
@@ -100,6 +99,9 @@ function loadFlags(){
 
 function switchLevel(index){
     //reset mapdata
+    for(var entity of entitys){
+        entity.markedForDeletion = true
+    }
     entitys = []
     tiledmap = levels[index]
     tiledmap.layers[0].data = tiledmap.layers[0].backup.slice()

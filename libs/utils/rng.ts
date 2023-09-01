@@ -20,6 +20,10 @@ class RNG{
         return lerp(min,max,this.norm())
     }
 
+    rangeCenter(center,dif){
+        return this.range(center - dif, center + dif)
+    }
+
     rangeFloor(min:number,max:number){
         return Math.floor(this.range(min,max))
     }

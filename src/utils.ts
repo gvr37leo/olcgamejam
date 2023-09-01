@@ -113,8 +113,46 @@ function spawnFireParticles(pos:Vector,vel){
                 drawAnimation(self.pos,fireballAnimation,time)
             },
             data:new Particle({
-                vel:new Vector(rng.range(-50,50), rng.range(-20,20)).add(vel.c().scale(0.2)),
+                vel:new Vector(rng.rangeCenter(0,20), rng.range(0,20)).add(vel.c().scale(0.1)),
                 acc:new Vector(0, -50),
+            })
+        }))
+    }
+}
+
+var dustsprite = loadImage('animations/dust.png')
+
+var seq = new Sequencer({})
+seq.show(0.1)
+seq.pause(1)
+seq.hide(0.2)
+
+function spawnDustParticles(pos:Vector,vel:Vector){
+    var lifespan = 2
+    for(var i = 0; i < 1;i++){
+        entitys.push(new Entity({
+            pos:pos.c(),
+            createdAt:time,
+            depth:0,
+            updatecb:(self) => {
+                var particle:Particle = self.data
+                particle.vel.add(particle.acc.c().scale(globaldt))
+                self.pos.add(particle.vel.c().scale(globaldt))
+                var age = to(self.createdAt,time)
+                if(age > lifespan){
+                    self.markedForDeletion = true
+                }
+            },
+            drawcb:(self) => {
+                var age = to(self.createdAt,time)
+                var completion = inverseLerp(age,0,lifespan)
+                // ctxt.globalAlpha = 1 - tween(completion,0,0)
+                ctxt.globalAlpha = seq.seekRel(completion)
+                drawImage(dustsprite,self.pos,new Vector(40,34).scale(0.5),true)
+            },
+            data:new Particle({
+                vel:new Vector(rng.rangeCenter(0,20),rng.rangeCenter(0,20)).add(vel.c().scale(0.2)),
+                acc:new Vector(0, -20),
             })
         }))
     }
@@ -159,7 +197,7 @@ function collissionCheckWorld(rect:Rect){
 function collisionCheckEntitys(rect:Rect,type:string){
     var fentitys = entitys.filter(e => e.type == type)
     for(var entity of fentitys){
-        if(entity.rect.collideBox(rect)){
+        if(entity.rect?.collideBox(rect)){
             return entity
         }
     }
@@ -178,10 +216,13 @@ function rotEnd(){
     ctxt.restore()
 }
 
-function drawImage(image,pos:Vector,size:Vector,centered = false){
+function drawImage(image:HTMLImageElement,pos:Vector,size:Vector,centered = false){
     if(centered){
+        var halfsize = size.c().scale(0.5)
         pos = pos.c().sub(halfsize)
     }
+    // image.width
+    // image.height
     ctxt.drawImage(image,pos.x,pos.y,size.x + 1,size.y + 1)
 }
 

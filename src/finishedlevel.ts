@@ -1,6 +1,5 @@
 function loadFinishedLevel(){
-    movePlayerToSpawn()
+    spawnPlayer()
     loadTeleports()
     loadFlags()
-    
 }

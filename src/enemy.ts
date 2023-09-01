@@ -8,6 +8,9 @@ class Enemy{
 
     attackcd = new Cooldown(1)
     changepos:Vector
+    deadTimeStamp = 0
+    isDead = false
+    flipx = false
 
     constructor(incdata:Partial<Enemy>){
         Object.assign(this,incdata)

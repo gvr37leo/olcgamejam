@@ -13,6 +13,7 @@
 /// <reference path="libs/networking/entity.ts" />
 /// <reference path="libs/networking/server.ts" />
 /// <reference path="libs/utils/domutils.js" />
+/// <reference path="src/sequencer.ts" />
 /// <reference path="src/utils.ts" />
 /// <reference path="src/bit.ts" />
 /// <reference path="src/enemy.ts" />
@@ -30,11 +31,10 @@
 
 
 
-//todo
-//last 4 bits on level3
-//testupload to see how it looks on itch.io
-//write description
-//record video with playthrough
+//todo setup a template project for a future gamejam
+
+
+
 
 
 
@@ -43,19 +43,23 @@ var drawdebuggraphics = false
 var memoryimage = loadImage('res/memoryworld.png')
 var TileMaps:any
 var levels = [TileMaps.level1,TileMaps.level2,TileMaps.level3,TileMaps.menulevel,TileMaps.finished]
-var levelindex = 3
+var loadlevelcallbacks = [loadLevel1,loadLevel2,loadLevel3,loadMenulevel,loadFinishedLevel]
+var menulevel = 3
+var levelindex = menulevel
 var tiledmap = levels[levelindex]
 
-var levelunlocked = drawdebuggraphics ? [true,true,true,true] : [true,false,false,true]
+var levelunlocked = drawdebuggraphics ? [true,true,true,true] : [true,false,false,false]
 for(var level of levels){
-    preprocessTiledMap(level)    
+    preprocessTiledMap(level)
 }
+
 
 var screensize = new Vector(document.documentElement.clientWidth,document.documentElement.clientHeight)
 var crret = createCanvas(screensize.x,screensize.y)
 var {canvas,ctxt} = crret
 console.log('here')
 var tilesize = new Vector(tiledmap.tilewidth,tiledmap.tileheight)
+var halfsize = tilesize.c().scale(0.5)
 
 declare var Howl;
 var riflesound = new Howl({
@@ -131,39 +135,24 @@ var skeletonIdleAnimation = new SpriteAnimation({
     framecount:4,
     duration:1,
     spritesize:new Vector(64,64)
+})
+var skeletonDieAnimation = new SpriteAnimation({
+    imageatlas:loadImage('animations/Skeleton enemy.png'),
+    startpos:new Vector(0,1),
+    direction:new Vector(1,0),
+    framecount:13,
+    duration:1,
+    spritesize:new Vector(64,64)
 }) 
 
 
 var flipx = false
 var currentanimation = witchRunAnimation
 
-var halfsize = tilesize.c().scale(0.5)
 
-var player = new Entity({
-    pos:new Vector(0,0),
-    rect:Rect.fromsize(new Vector(0,0), new Vector(20,20)),
-    data:new Player({
-        speed:200,
 
-    })
-})
 var entitys:Entity<any>[] = []
 var camera = new Camera(ctxt)
-
-
-
-
-document.addEventListener('keydown',(e) => {
-    if(e.key == 'f'){
-
-    }
-})
-
-class Bullet{
-    vel:Vector
-    isBitBullet = false
-}
-
 
 var mousebuttons = []
 var mousebuttonsPressed = []
@@ -180,51 +169,26 @@ document.addEventListener('mousedown', e => {
 document.addEventListener('mouseup', e => {
     mousebuttons[e.button] = false
 })
+var globalplayer:Entity<Player> = null
 
-var loadlevelcallbacks = [loadLevel1,loadLevel2,loadLevel3,loadMenulevel,loadFinishedLevel]
 
 loadlevelcallbacks[levelindex]()
 normalmusic.play()
+var dustCooldown = new Cooldown(0.2)
 
 var globaldt = 0;
 var time = 0;
+
 loop((dt) => {
 
     dt = clamp(dt,1/144,1/30)
     globaldt = dt;
     time += dt;
-    // ctxt.clearRect(0,0,screensize.x,screensize.y)
     ctxt.fillStyle = 'gray'
     ctxt.fillRect(0,0,screensize.x,screensize.y)
-    
-
-
-    var dir = new Vector(0,0)
-
-    if(keys['w']){
-        dir.y--
-    }
-    if(keys['s']){
-        dir.y++
-    }
-    if(keys['a']){
-        dir.x--
-        flipx = true
-    }
-    if(keys['d']){
-        dir.x++
-        flipx = false
-    }
-    if(dir.length() > 0){
-        dir.normalize()
-        currentanimation = witchRunAnimation
-    }else{
-        currentanimation = witchIdleAnimation
-    }
-    moveEntity(player,dir.scale(player.data.speed * dt))
-
-    playercb(player)
-    for(var entity of entitys){
+    entitys.sort((a,b) => a.depth - b.depth)
+    var entitystemp = entitys.slice()
+    for(var entity of entitystemp){
         if(entity.markedForDeletion){
             continue
         }
@@ -232,8 +196,7 @@ loop((dt) => {
     }
     entitys = entitys.filter(e => e.markedForDeletion == false)
     
-    camera.pos.overwrite(player.pos)
-    // camera.scale = new Vector(1,1)
+    
     camera.begin()
         renderTiled(tiledmap)
 
@@ -255,13 +218,6 @@ loop((dt) => {
         }
         ctxt.globalAlpha = 1
         ctxt.fillStyle = 'red'
-        if(player.data.inBitWorld){
-            ctxt.strokeStyle = 'white'
-            drawRectBorder(player.rect)
-        }else{
-            drawAnimation(player.pos,currentanimation,time,flipx,true)
-        }
-        // fillRect(player.pos,player.rect.size(),true)
 
     camera.end()
     mousebuttonsPressed.fill(false)

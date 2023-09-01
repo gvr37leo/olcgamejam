@@ -253,19 +253,20 @@
                 }, 
                 {
                  "class":"",
-                 "height":19,
+                 "height":32,
                  "id":2,
                  "name":"",
                  "rotation":0,
                  "text":
                     {
+                     "pixelsize":30,
                      "text":"please rate the game",
                      "wrap":true
                     },
                  "visible":true,
-                 "width":160,
+                 "width":288,
                  "x":1472,
-                 "y":1792
+                 "y":1760
                 }],
          "opacity":1,
          "type":"objectgroup",

@@ -14,18 +14,32 @@ function loadLevel1(){
     //corresponding to the 5 walls in game
 
     loadWallsIntoBits(findObjectWithName('mark1').pos,findObjectWithName('mark2').pos,findObjectWithName('ref1').pos,348,1)
-    movePlayerToSpawn()
+    var player = spawnPlayer()
     loadTeleports()
     loadFlags()
-    entitys.push(new Entity({
-        updatecb(self) {
-            player.data.gun.setProp('ammo',6)
-        },
-    }))
+    player.data.gun.setProp('ammo',0b11111111)
 }
 
-function movePlayerToSpawn(){
-    player.pos = findObjectsOfType('spawn')[0].pos.c()
+function spawnPlayer(){
+    var player = new Entity({
+        type:'player',
+        pos:findObjectsOfType('spawn')[0].pos.c(),
+        rect:Rect.fromsize(new Vector(0,0), new Vector(20,20)),
+        depth:1,
+        updatecb(self) {
+            self.data.updatecb(self)
+        },
+        drawcb(self) {
+            self.data.drawcb(self)
+        },
+        data:new Player({
+            speed:200,
+    
+        })
+    })
+    entitys.push(player)
+    globalplayer = player
+    return player
 }
 
 var spiralimage = loadImage('animations/spiral.png')
@@ -38,13 +52,13 @@ function loadTeleports(){
             rect:Rect.fromCenter(object.pos.c(),tilesize),
             updatecb(self) {
                 tpcooldown.update(globaldt)
-                if(player.rect.collideBox(self.rect) && tpcooldown.tryfire()){
+                if(globalplayer.rect.collideBox(self.rect) && tpcooldown.tryfire()){
                     teleportsound.play()
-                    player.pos = findObjectWithId(object.dst).pos.c()
-                    player.rect.moveToCentered(player.pos)
-                    player.data.inBitWorld = !player.data.inBitWorld
+                    globalplayer.pos = findObjectWithId(object.dst).pos.c()
+                    globalplayer.rect.moveToCentered(globalplayer.pos)
+                    globalplayer.data.inBitWorld = !globalplayer.data.inBitWorld
 
-                    if(player.data.inBitWorld){
+                    if(globalplayer.data.inBitWorld){
                         bitmusic.play()
                         normalmusic.pause()
                     }else{
@@ -74,7 +88,7 @@ function loadFlags(){
             rect:Rect.fromCenter(flagpos,tilesize),
             updatecb(self) {
 
-                if(self.data.enabled && self.rect.collideBox(player.rect)){
+                if(self.data.enabled && self.rect.collideBox(globalplayer.rect)){
                     switchLevel(self.data.dstlevel)
                     levelunlocked[self.data.dstlevel] = true
                 }

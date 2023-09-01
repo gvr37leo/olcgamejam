@@ -11,20 +11,15 @@
 //in a second level also add health
 
 function loadLevel2(){
-    movePlayerToSpawn()
+    var player = spawnPlayer()
     loadTeleports()
     // initBits(findObjectWithName('gunbits').pos,normalgun.data)
     var dummy = new Enemy({})
-    loadWallsIntoBits(findObjectWithName('mark1').pos,findObjectWithName('mark2').pos,findObjectWithName('ref1').pos,92,1)
+    // loadWallsIntoBits(findObjectWithName('mark1').pos,findObjectWithName('mark2').pos,findObjectWithName('ref1').pos,92,1)
     var enemys = loadEnemys()
     initBits(findObjectWithName('enemybits').pos,enemys[0].data.data,false,8,14)
     loadFlags()
-
-    entitys.push(new Entity({
-        updatecb(self) {
-            player.data.gun.setProp('ammo',6)
-        },
-    }))
+    player.data.gun.setProp('ammo',0b11111111)
 }
 
 
@@ -38,28 +33,37 @@ function loadEnemys(){
             pos:object.pos.c(),
             rect:Rect.fromCenter(object.pos.c(),new Vector(26,50)),
             updatecb(self) {
+                if(self.data.isDead){
+                    return
+                }
+                var playerdir = self.pos.to(globalplayer.pos)
+                self.data.flipx = playerdir.x < 0 ? true : false
+
                 self.data.attackcd.update(globaldt)
                 
-                if(player.data.inBitWorld == false){
+                if(globalplayer.data.inBitWorld == false){
                     var oldpos = self.pos.c()
-                    moveEntity(self,self.pos.to(player.pos).normalize().scale(150 * globaldt))
+                    moveEntity(self,self.pos.to(globalplayer.pos).normalize().scale(150 * globaldt))
                     self.data.changepos = oldpos.to(self.pos)
                 }
-                if(player.rect.collideBox(self.rect) && self.data.attackcd.tryfire()){
-                    player.data.health -= self.data.getProp('damage')
-                    if(player.data.health <= 0){
+                if(globalplayer.rect.collideBox(self.rect) && self.data.attackcd.tryfire()){
+                    globalplayer.data.health -= self.data.getProp('damage')
+                    if(globalplayer.data.health <= 0){
                         switchLevel(3)
                     }
                 }
             },
             drawcb(self) {
-                var playerdir = self.pos.to(player.pos)
-                var flipx = playerdir.x < 0 ? true : false
+                
 
-                if(self.data.changepos.length() > 0.05){
-                    drawAnimation(self.pos,skeletonWalkAnimation,time,flipx,true)
+                if(self.data.isDead){
+                    drawAnimation(self.pos,skeletonDieAnimation,to(self.data.deadTimeStamp,time),self.data.flipx,true,false)
                 }else{
-                    drawAnimation(self.pos,skeletonIdleAnimation,time,flipx,true)
+                    if(self.data.changepos.length() > 0.05){
+                        drawAnimation(self.pos,skeletonWalkAnimation,time,self.data.flipx,true)
+                    }else{
+                        drawAnimation(self.pos,skeletonIdleAnimation,time,self.data.flipx,true)
+                    }
                 }
             },
             data:new Enemy({

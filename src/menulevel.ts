@@ -1,5 +1,8 @@
 function loadMenulevel(){
-    movePlayerToSpawn()
+
+
+    
+    spawnPlayer()
     loadTeleports()
     var enemys = loadEnemys()
     // initBits(findObjectWithName('gunbits').pos,normalgun.data)
@@ -12,3 +15,4 @@ function loadMenulevel(){
         i++
     }
 }
+

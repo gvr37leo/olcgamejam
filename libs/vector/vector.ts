@@ -158,6 +158,10 @@ class Vector{
 		return -1;
     }
 
+    equal(v:Vector){
+        return this.x == v.x && this.y == v.y
+    }
+
     incr(comparedTo: Vector): boolean {
         for(var i = 0; i < this.vals.length; i++){
 			if((this.vals[i] + 1) < comparedTo.vals[i]){

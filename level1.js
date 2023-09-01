@@ -255,8 +255,8 @@
                  "rotation":0,
                  "visible":true,
                  "width":0,
-                 "x":2240,
-                 "y":1056
+                 "x":2272,
+                 "y":1088
                 }, 
                 {
                  "class":"teleporter",
@@ -273,7 +273,7 @@
                  "rotation":0,
                  "visible":true,
                  "width":0,
-                 "x":1952,
+                 "x":2048,
                  "y":3936
                 }, 
                 {

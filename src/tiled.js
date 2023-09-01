@@ -61,31 +61,39 @@ function renderTiled(tiledData){
                     drawImage2(tileset.texture,srcrect,dstrect)
                 }
 
-                if(layer.objects){
-                    for(var object of layer.objects){
-                        if(object.text){
-                            ctxt.fillStyle = 'black'
-                            if(object.text.color){
-                                ctxt.fillStyle = object.text.color 
-                            }
-                            ctxt.font = '30px Arial'
-                            ctxt.fillText(object.text.text,object.x,object.y)
-                        }else{
-                            if(drawdebuggraphics){
-                                ctxt.fillStyle = 'green'
-                                fillRect(object.pos,tiledData.tilesize,true)
-                            }
-                        }
+                
+            }
+            
+        }
+    }
+
+    for(var layer of tiledData.layers){
+        if(layer.objects){
+            for(var object of layer.objects){
+                if(object.text){
+                    ctxt.fillStyle = 'black'
+                    if(object.text.color){
+                        ctxt.fillStyle = object.text.color 
+                    }
+                    var fontsize = object.text.pixelsize ?? 16
+                    ctxt.font = `${fontsize}px Arial`
+                    ctxt.textAlign = 'center'
+                    ctxt.textBaseline = 'middle'
+                    var center = new Vector(object.x,object.y).add(new Vector(object.width,object.height).scale(0.5))
+                    ctxt.fillText(object.text.text,center.x,center.y)
+                }else{
+                    if(drawdebuggraphics){
+                        ctxt.fillStyle = 'green'
+                        fillRect(object.pos,tiledData.tilesize,true)
                     }
                 }
             }
-            
         }
     }
 }
 
 
-function preprocessTiledMap(tiledmap){
+async function preprocessTiledMap(tiledmap){
     tiledmap.tilesize = new Vector(tiledmap.tilewidth,tiledmap.tileheight)
     tiledmap.size = new Vector(tiledmap.width,tiledmap.height)
 

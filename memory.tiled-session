@@ -3,14 +3,14 @@
         "height": 4300,
         "width": 2
     },
-    "activeFile": "level3.js",
+    "activeFile": "level4.js",
     "expandedProjectPaths": [
-        "levels",
-        "."
+        ".",
+        "levels"
     ],
     "fileStates": {
         "": {
-            "scaleInDock": 0.75,
+            "scaleInDock": 1,
             "scaleInEditor": 1
         },
         ":/automap-tiles.tsx": {
@@ -20,15 +20,19 @@
             "scaleInDock": 0.75,
             "scaleInEditor": 1
         },
+        "externtest.tsj": {
+            "scaleInDock": 1,
+            "scaleInEditor": 1
+        },
         "finished.js": {
             "expandedObjectLayers": [
                 2
             ],
-            "scale": 0.25,
-            "selectedLayer": 0,
+            "scale": 0.75,
+            "selectedLayer": 2,
             "viewCenter": {
-                "x": 2218,
-                "y": 2332
+                "x": 1558,
+                "y": 1600
             }
         },
         "finished.js#TX Plant": {
@@ -51,11 +55,11 @@
             "expandedObjectLayers": [
                 2
             ],
-            "scale": 0.125,
-            "selectedLayer": 0,
+            "scale": 0.25,
+            "selectedLayer": 1,
             "viewCenter": {
-                "x": 3116,
-                "y": 2864
+                "x": 1856,
+                "y": 2160
             }
         },
         "level1.js#TX Props": {
@@ -78,12 +82,15 @@
             "expandedObjectLayers": [
                 2
             ],
-            "scale": 0.125,
-            "selectedLayer": 0,
+            "scale": 1,
+            "selectedLayer": 2,
             "viewCenter": {
-                "x": 2308,
-                "y": 2832
+                "x": 1599,
+                "y": 2400
             }
+        },
+        "level2.js#TX Plant": {
+            "scaleInDock": 1
         },
         "level2.js#TX Props": {
             "scaleInDock": 0.5,
@@ -103,11 +110,11 @@
             "expandedObjectLayers": [
                 2
             ],
-            "scale": 0.5,
+            "scale": 0.33,
             "selectedLayer": 1,
             "viewCenter": {
-                "x": 1317,
-                "y": 1644
+                "x": 1739.3939393939395,
+                "y": 2400
             }
         },
         "level3.js#TX Props": {
@@ -123,6 +130,27 @@
         "level3.js#memoryworld": {
             "scaleInDock": 1,
             "scaleInEditor": 1
+        },
+        "level4.js": {
+            "expandedObjectLayers": [
+                2
+            ],
+            "scale": 0.75,
+            "selectedLayer": 1,
+            "viewCenter": {
+                "x": 1726.6666666666665,
+                "y": 2320
+            }
+        },
+        "level4.js#TX Tileset Grass": {
+            "scaleInDock": 1,
+            "scaleInEditor": 1
+        },
+        "level4.js#TX Tileset Stone Ground": {
+            "scaleInDock": 1
+        },
+        "level4.js#memoryworld": {
+            "scaleInDock": 1
         },
         "levels/level1.js": {
             "scale": 0.0623779296875,
@@ -151,11 +179,11 @@
             "expandedObjectLayers": [
                 2
             ],
-            "scale": 0.5,
-            "selectedLayer": 2,
+            "scale": 1.5,
+            "selectedLayer": 0,
             "viewCenter": {
-                "x": 1733,
-                "y": 1430
+                "x": 1600,
+                "y": 1600
             }
         },
         "menulevel.js#TX Props": {
@@ -225,22 +253,30 @@
         "level1.js",
         "level2.js",
         "level3.js",
-        "menulevel.js"
+        "menulevel.js",
+        "finished.js",
+        "level4.js"
     ],
     "project": "memory.tiled-project",
     "property.type": "int",
     "recentFiles": [
         "level1.js",
         "level2.js",
-        "menulevel.js",
         "level3.js",
+        "menulevel.js",
         "finished.js",
+        "level4.js",
+        "externtest.tsj",
         "testmap.js",
         "TX Props.tsx",
         "levels/level1.js",
         "tiles.js"
     ],
     "tileset.embedInMap": true,
-    "tileset.lastUsedFormat": "tsx",
+    "tileset.lastUsedFormat": "json",
+    "tileset.tileSize": {
+        "height": 32,
+        "width": 32
+    },
     "tileset.type": 0
 }

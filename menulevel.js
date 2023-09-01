@@ -302,25 +302,26 @@
                  "rotation":0,
                  "visible":true,
                  "width":0,
-                 "x":1552,
-                 "y":1904.66666666667
+                 "x":1551.33333333333,
+                 "y":1886.66666666667
                 }, 
                 {
                  "class":"",
-                 "height":19,
+                 "height":32,
                  "id":5,
                  "name":"",
                  "rotation":0,
                  "text":
                     {
+                     "fontfamily":"Arial",
                      "halign":"center",
                      "text":"move = wasd",
                      "wrap":true
                     },
                  "visible":true,
                  "width":192,
-                 "x":1216,
-                 "y":1600
+                 "x":1312,
+                 "y":1888
                 }, 
                 {
                  "class":"",
@@ -336,8 +337,8 @@
                     },
                  "visible":true,
                  "width":192,
-                 "x":1216,
-                 "y":1664
+                 "x":1312,
+                 "y":1856
                 }, 
                 {
                  "class":"flag",
@@ -364,7 +365,7 @@
          "y":0
         }],
  "nextlayerid":4,
- "nextobjectid":8,
+ "nextobjectid":9,
  "orientation":"orthogonal",
  "renderorder":"right-down",
  "tiledversion":"1.9.2",

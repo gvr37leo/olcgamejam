@@ -17,18 +17,20 @@ class SpriteAnimation{
     
 }
 
-function drawAnimation(pos:Vector,animation:SpriteAnimation,time,flipx = false,centered = true){
+function drawAnimation(pos:Vector,animation:SpriteAnimation,time,flipx = false,centered = true,loop = true){
     if(centered){
         pos = pos.c().sub(animation.spritesize.c().scale(0.5))
     }
-    var frame = Math.floor(map(time % animation.duration,0,animation.duration,0,animation.framecount))
+    if(loop == false){
+        time = clamp(time,0,animation.duration - 0.0001)
+    }
+    var frame = clamp(Math.floor(map(time % animation.duration,0,animation.duration,0,animation.framecount)),0,animation.framecount) 
     if(flipx){
         var center = pos.c().add(animation.spritesize.c().scale(0.5))
         ctxt.save()
         ctxt.translate(center.x,center.y)
         ctxt.scale(-1,1)
         ctxt.translate(-center.x,-center.y)
-        
     }
     drawAtlasImage(pos,animation.startpos.c().add(animation.direction.c().scale(frame)),animation.spritesize,animation.imageatlas)
     if(flipx){

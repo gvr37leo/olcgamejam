@@ -3,6 +3,7 @@ class Entity<T>{
     name:string
     type:string
     pos:Vector
+    depth = 0
     // vel:Vector
     createdAt:number
     updatecb:(self:Entity<T>) => void

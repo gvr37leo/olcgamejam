@@ -267,6 +267,24 @@
                  "width":288,
                  "x":1472,
                  "y":1760
+                }, 
+                {
+                 "class":"flag",
+                 "height":0,
+                 "id":3,
+                 "name":"",
+                 "point":true,
+                 "properties":[
+                        {
+                         "name":"dstlevel",
+                         "type":"int",
+                         "value":4
+                        }],
+                 "rotation":0,
+                 "visible":true,
+                 "width":0,
+                 "x":1600,
+                 "y":1856
                 }],
          "opacity":1,
          "type":"objectgroup",
@@ -275,7 +293,7 @@
          "y":0
         }],
  "nextlayerid":4,
- "nextobjectid":3,
+ "nextobjectid":4,
  "orientation":"orthogonal",
  "renderorder":"right-down",
  "tiledversion":"1.9.2",

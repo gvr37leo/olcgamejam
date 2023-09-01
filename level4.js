@@ -286,7 +286,7 @@
                         {
                          "name":"dstlevel",
                          "type":"int",
-                         "value":3
+                         "value":5
                         }],
                  "rotation":0,
                  "visible":true,

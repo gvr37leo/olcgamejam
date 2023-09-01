@@ -254,7 +254,7 @@
                  "rotation":0,
                  "visible":true,
                  "width":0,
-                 "x":1504,
+                 "x":1472,
                  "y":1600
                 }, 
                 {
@@ -272,7 +272,7 @@
                  "rotation":0,
                  "visible":true,
                  "width":0,
-                 "x":1568,
+                 "x":1536,
                  "y":1600
                 }, 
                 {
@@ -290,7 +290,7 @@
                  "rotation":0,
                  "visible":true,
                  "width":0,
-                 "x":1632,
+                 "x":1600,
                  "y":1600
                 }, 
                 {
@@ -350,13 +350,31 @@
                         {
                          "name":"dstlevel",
                          "type":"int",
-                         "value":4
+                         "value":5
                         }],
                  "rotation":0,
                  "visible":true,
                  "width":0,
                  "x":2432,
                  "y":1792
+                }, 
+                {
+                 "class":"flag",
+                 "height":0,
+                 "id":9,
+                 "name":"",
+                 "point":true,
+                 "properties":[
+                        {
+                         "name":"dstlevel",
+                         "type":"int",
+                         "value":3
+                        }],
+                 "rotation":0,
+                 "visible":true,
+                 "width":0,
+                 "x":1664,
+                 "y":1600
                 }],
          "opacity":1,
          "type":"objectgroup",
@@ -365,7 +383,7 @@
          "y":0
         }],
  "nextlayerid":4,
- "nextobjectid":9,
+ "nextobjectid":10,
  "orientation":"orthogonal",
  "renderorder":"right-down",
  "tiledversion":"1.9.2",

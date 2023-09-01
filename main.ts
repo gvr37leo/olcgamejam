@@ -42,13 +42,13 @@
 var drawdebuggraphics = false
 var memoryimage = loadImage('res/memoryworld.png')
 var TileMaps:any
-var levels = [TileMaps.level1,TileMaps.level2,TileMaps.level3,TileMaps.menulevel,TileMaps.finished]
-var loadlevelcallbacks = [loadLevel1,loadLevel2,loadLevel3,loadMenulevel,loadFinishedLevel]
-var menulevel = 3
+var levels = [TileMaps.level1,TileMaps.level2,TileMaps.level3,TileMaps.level4,TileMaps.menulevel,TileMaps.finished]
+var loadlevelcallbacks = [loadLevel1,loadLevel2,loadLevel3,loadLevel4,loadMenulevel,loadFinishedLevel]
+var menulevel = 4
 var levelindex = menulevel
 var tiledmap = levels[levelindex]
 
-var levelunlocked = drawdebuggraphics ? [true,true,true,true] : [true,false,false,false]
+var levelunlocked = drawdebuggraphics ? [true,true,true,true,true] : [true,false,false,true,false]
 for(var level of levels){
     preprocessTiledMap(level)
 }

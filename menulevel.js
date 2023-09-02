@@ -248,8 +248,8 @@
                  "properties":[
                         {
                          "name":"dstlevel",
-                         "type":"int",
-                         "value":0
+                         "type":"string",
+                         "value":"level1"
                         }],
                  "rotation":0,
                  "visible":true,
@@ -266,8 +266,8 @@
                  "properties":[
                         {
                          "name":"dstlevel",
-                         "type":"int",
-                         "value":1
+                         "type":"string",
+                         "value":"level2"
                         }],
                  "rotation":0,
                  "visible":true,
@@ -284,8 +284,8 @@
                  "properties":[
                         {
                          "name":"dstlevel",
-                         "type":"int",
-                         "value":2
+                         "type":"string",
+                         "value":"level3"
                         }],
                  "rotation":0,
                  "visible":true,
@@ -343,32 +343,14 @@
                 {
                  "class":"flag",
                  "height":0,
-                 "id":7,
-                 "name":"",
-                 "point":true,
-                 "properties":[
-                        {
-                         "name":"dstlevel",
-                         "type":"int",
-                         "value":5
-                        }],
-                 "rotation":0,
-                 "visible":true,
-                 "width":0,
-                 "x":2432,
-                 "y":1792
-                }, 
-                {
-                 "class":"flag",
-                 "height":0,
                  "id":9,
                  "name":"",
                  "point":true,
                  "properties":[
                         {
                          "name":"dstlevel",
-                         "type":"int",
-                         "value":3
+                         "type":"string",
+                         "value":"level4"
                         }],
                  "rotation":0,
                  "visible":true,

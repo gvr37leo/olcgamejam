@@ -169,7 +169,7 @@ function collissionCheckWorld(rect:Rect){
     var tl = rect.getPoint(new Vector(0,0)).div(tilesize).floor()
     var br = rect.getPoint(new Vector(1,1)).div(tilesize).floor()
 
-    for(var layer of tiledmap.layers){
+    for(var layer of currentlevel.tilemap.layers){
         if(layer.type == 'objectgroup'){
             continue
         }
@@ -182,7 +182,7 @@ function collissionCheckWorld(rect:Rect){
                 if(gid == 0 || gid == undefined){
                     continue
                 }
-                var {lid,tileset} = gid2local(gid,tiledmap.tilesets)
+                var {lid,tileset} = gid2local(gid,currentlevel.tilemap.tilesets)
                 if(tileset.tilesdict[lid]?.isSolid){
                     return true
                 }

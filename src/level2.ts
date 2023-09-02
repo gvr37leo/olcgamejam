@@ -49,7 +49,7 @@ function loadEnemys(){
                 if(globalplayer.rect.collideBox(self.rect) && self.data.attackcd.tryfire()){
                     globalplayer.data.health -= self.data.getProp('damage')
                     if(globalplayer.data.health <= 0){
-                        switchLevel(menulevel)
+                        switchLevel('menulevel')
                     }
                 }
             },

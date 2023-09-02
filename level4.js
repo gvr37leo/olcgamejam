@@ -285,8 +285,8 @@
                  "properties":[
                         {
                          "name":"dstlevel",
-                         "type":"int",
-                         "value":5
+                         "type":"string",
+                         "value":"finished"
                         }],
                  "rotation":0,
                  "visible":true,

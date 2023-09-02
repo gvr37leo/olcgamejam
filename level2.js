@@ -360,8 +360,8 @@
                  "properties":[
                         {
                          "name":"dstlevel",
-                         "type":"int",
-                         "value":2
+                         "type":"string",
+                         "value":"level3"
                         }],
                  "rotation":0,
                  "visible":true,
@@ -464,24 +464,6 @@
                  "width":0,
                  "x":1056,
                  "y":3648
-                }, 
-                {
-                 "class":"flag",
-                 "height":0,
-                 "id":19,
-                 "name":"",
-                 "point":true,
-                 "properties":[
-                        {
-                         "name":"dstlevel",
-                         "type":"int",
-                         "value":2
-                        }],
-                 "rotation":0,
-                 "visible":true,
-                 "width":0,
-                 "x":2191.5,
-                 "y":1010
                 }, 
                 {
                  "class":"",

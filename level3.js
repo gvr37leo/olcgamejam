@@ -408,8 +408,8 @@
                  "properties":[
                         {
                          "name":"dstlevel",
-                         "type":"int",
-                         "value":3
+                         "type":"string",
+                         "value":"level4"
                         }],
                  "rotation":0,
                  "visible":true,

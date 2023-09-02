@@ -90,7 +90,6 @@ function loadFlags(){
 
                 if(self.data.enabled && self.rect.collideBox(globalplayer.rect)){
                     switchLevel(self.data.dstlevel)
-                    levelunlocked[self.data.dstlevel] = true
                 }
             },
             drawcb(self) {
@@ -111,15 +110,16 @@ function loadFlags(){
 
 
 
-function switchLevel(index){
+function switchLevel(levelname){
     //reset mapdata
     for(var entity of entitys){
         entity.markedForDeletion = true
     }
     entitys = []
-    tiledmap = levels[index]
-    tiledmap.layers[0].data = tiledmap.layers[0].backup.slice()
-    loadlevelcallbacks[index]()
+    currentlevel = levelsobj.find(l => l.name == levelname)
+    currentlevel.tilemap.layers[0].data = currentlevel.tilemap.layers[0].backup.slice()
+    currentlevel.unlocked = true
+    currentlevel.loadcb()
 }
 
 function loadWallsIntoBits(wallstl:Vector,wallsbr:Vector,destination:Vector,wallgid:number,grassgid){
@@ -127,8 +127,8 @@ function loadWallsIntoBits(wallstl:Vector,wallsbr:Vector,destination:Vector,wall
     wallstl.to(wallsbr).div(tilesize).add(new Vector(1,1)).loop(v => {
         var absrel = v.c().mul(tilesize)
         var abspos = absrel.c().add(wallstl)
-        var index = vector2index(abspos.c().div(tilesize),tiledmap.width)
-        var gid = tiledmap.layers[0].data[index]
+        var index = vector2index(abspos.c().div(tilesize),currentlevel.tilemap.width)
+        var gid = currentlevel.tilemap.layers[0].data[index]
         if(gid != wallgid){
             return
         }
@@ -138,8 +138,8 @@ function loadWallsIntoBits(wallstl:Vector,wallsbr:Vector,destination:Vector,wall
             rect:Rect.fromsize(bitpos,tilesize),
             type:'bit',
             updatecb(self) {
-                var index = vector2index(abspos.c().div(tilesize),tiledmap.width)
-                tiledmap.layers[0].data[index] = self.data.get() == 1 ? wallgid : grassgid
+                var index = vector2index(abspos.c().div(tilesize),currentlevel.tilemap.width)
+                currentlevel.tilemap.layers[0].data[index] = self.data.get() == 1 ? wallgid : grassgid
             },
             drawcb(self) {
                 var bit:Bit = self.data
@@ -164,7 +164,7 @@ function loadWallsIntoBits(wallstl:Vector,wallsbr:Vector,destination:Vector,wall
 
 function findObjectsOfType(type){
     var res = []
-    for(var layer of tiledmap.layers){
+    for(var layer of currentlevel.tilemap.layers){
         for(var object of layer.objects ?? []){
             if(object.class == type){
                 res.push(object)
@@ -175,7 +175,7 @@ function findObjectsOfType(type){
 }
 
 function findObjectWithId(id){
-    for(var layer of tiledmap.layers){
+    for(var layer of currentlevel.tilemap.layers){
         for(var object of layer.objects ?? []){
             if(object.id == id){
                 return object
@@ -186,7 +186,7 @@ function findObjectWithId(id){
 }
 
 function findObjectWithName(name){
-    for(var layer of tiledmap.layers){
+    for(var layer of currentlevel.tilemap.layers){
         for(var object of layer.objects ?? []){
             if(object.name == name){
                 return object

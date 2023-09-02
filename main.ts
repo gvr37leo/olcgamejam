@@ -35,6 +35,50 @@
 
 
 
+class Level{
+    tilemap
+    name
+    loadcb
+    unlocked = false
+
+    constructor(data:Partial<Level>){
+        Object.assign(this,data)
+    }
+}
+
+var levelsobj = [
+    new Level({
+        name:'level1',
+        tilemap:TileMaps.level1,
+        loadcb:loadLevel1,
+        unlocked:true,
+    }),
+    new Level({
+        name:'level2',
+        tilemap:TileMaps.level2,
+        loadcb:loadLevel2,
+    }),
+    new Level({
+        name:'level3',
+        tilemap:TileMaps.level3,
+        loadcb:loadLevel3,
+    }),
+    new Level({
+        name:'level4',
+        tilemap:TileMaps.level4,
+        loadcb:loadLevel4,
+    }),
+    new Level({
+        name:'menulevel',
+        tilemap:TileMaps.menulevel,
+        loadcb:loadMenulevel,
+    }),
+    new Level({
+        name:'finished',
+        tilemap:TileMaps.finished,
+        loadcb:loadFinishedLevel,
+    }),
+]
 
 
 
@@ -42,15 +86,10 @@
 var drawdebuggraphics = false
 var memoryimage = loadImage('res/memoryworld.png')
 var TileMaps:any
-var levels = [TileMaps.level1,TileMaps.level2,TileMaps.level3,TileMaps.level4,TileMaps.menulevel,TileMaps.finished]
-var loadlevelcallbacks = [loadLevel1,loadLevel2,loadLevel3,loadLevel4,loadMenulevel,loadFinishedLevel]
-var menulevel = 4
-var levelindex = menulevel
-var tiledmap = levels[levelindex]
+var currentlevel = levelsobj[4]
 
-var levelunlocked = drawdebuggraphics ? [true,true,true,true,true] : [true,false,false,true,false]
-for(var level of levels){
-    preprocessTiledMap(level)
+for(var level of levelsobj){
+    preprocessTiledMap(level.tilemap)
 }
 
 
@@ -58,7 +97,7 @@ var screensize = new Vector(document.documentElement.clientWidth,document.docume
 var crret = createCanvas(screensize.x,screensize.y)
 var {canvas,ctxt} = crret
 console.log('here')
-var tilesize = new Vector(tiledmap.tilewidth,tiledmap.tileheight)
+var tilesize = new Vector(levelsobj[4].tilemap.tilewidth,levelsobj[4].tilemap.tileheight)
 var halfsize = tilesize.c().scale(0.5)
 
 declare var Howl;
@@ -172,7 +211,7 @@ document.addEventListener('mouseup', e => {
 var globalplayer:Entity<Player> = null
 
 
-loadlevelcallbacks[levelindex]()
+currentlevel.loadcb()
 normalmusic.play()
 var dustCooldown = new Cooldown(0.2)
 
@@ -198,7 +237,7 @@ loop((dt) => {
     
     
     camera.begin()
-        renderTiled(tiledmap)
+        renderTiled(currentlevel.tilemap)
 
         for(var entity of entitys){
             ctxt.globalAlpha = 1

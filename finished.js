@@ -277,8 +277,8 @@
                  "properties":[
                         {
                          "name":"dstlevel",
-                         "type":"int",
-                         "value":4
+                         "type":"string",
+                         "value":"menulevel"
                         }],
                  "rotation":0,
                  "visible":true,

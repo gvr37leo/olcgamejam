@@ -55,11 +55,11 @@
             "expandedObjectLayers": [
                 2
             ],
-            "scale": 0.25,
+            "scale": 0.75,
             "selectedLayer": 1,
             "viewCenter": {
-                "x": 1856,
-                "y": 1104
+                "x": 2630.6666666666665,
+                "y": 1376
             }
         },
         "level1.js#TX Props": {
@@ -85,8 +85,8 @@
             "scale": 1,
             "selectedLayer": 2,
             "viewCenter": {
-                "x": 1598,
-                "y": 1079
+                "x": 2335,
+                "y": 1251
             }
         },
         "level2.js#TX Plant": {
@@ -179,11 +179,11 @@
             "expandedObjectLayers": [
                 2
             ],
-            "scale": 1.5,
+            "scale": 1,
             "selectedLayer": 2,
             "viewCenter": {
-                "x": 2318.6666666666665,
-                "y": 1851.333333333333
+                "x": 1758,
+                "y": 1747
             }
         },
         "menulevel.js#TX Props": {
@@ -258,7 +258,7 @@
         "level4.js"
     ],
     "project": "memory.tiled-project",
-    "property.type": "int",
+    "property.type": "string",
     "recentFiles": [
         "level1.js",
         "level4.js",
